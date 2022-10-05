@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 include(cmake/prelude.cmake)
-cmake_policy(set CMP0091 NEW)
+cmake_policy(SET CMP0091 NEW)
 project(
   Moradin-Forms
   VERSION 0.1.0
