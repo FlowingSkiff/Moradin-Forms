@@ -92,7 +92,7 @@ jobs:
       run: pip3 install conan
         && conan profile new default --detect
         && cp .github/clang-12.profile ~/.conan/profiles/default
-        && conan install . -if conan -b missing -pr clang-12 -pr:b clang-12
+        && conan install . -if conan -b missing
 
     - name: Configure
       env: { CXX: clang++-12 }
