@@ -5,16 +5,14 @@
 project(Moradin-FormsTests LANGUAGES CXX)
 
 # ---- Dependencies ----
-
 find_package(Catch2 REQUIRED)
 include(Catch)
 
 # ---- Tests ----
-
 add_executable(Moradin-Forms_test source/Moradin-Forms_test.cpp)
 target_link_libraries(
     Moradin-Forms_test PRIVATE
-    Moradin-Forms_lib
+    Core_lib
     Catch2::Catch2WithMain
 )
 target_compile_features(Moradin-Forms_test PRIVATE cxx_std_20)
@@ -22,5 +20,4 @@ target_compile_features(Moradin-Forms_test PRIVATE cxx_std_20)
 catch_discover_tests(Moradin-Forms_test)
 
 # ---- End-of-file commands ----
-
 add_folders(Test)

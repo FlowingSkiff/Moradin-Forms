@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "lib.hpp"
+#include "Core/lib.hpp"
 
 TEST_CASE("Name is Moradin-Forms", "[library]")
 {
