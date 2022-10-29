@@ -1,5 +1,7 @@
 [requires]
 fmt/8.1.1
+tinyxml2/9.0.0
+spdlog/1.10.0
 
 # Testing only dependencies below
 catch2/2.13.8

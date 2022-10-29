@@ -9,14 +9,24 @@ set_target_properties(
     EXPORT_NAME exe
 )
 
+target_compile_definitions(
+    Moradin-Forms_exe PRIVATE
+    AURORA_PATH="${AURORA_PATH}"
+)
+
 target_compile_features(
     Moradin-Forms_exe PRIVATE cxx_std_20
 )
+
+find_package(spdlog REQUIRED)
+find_package(tinyxml2 REQUIRED)
 
 target_link_libraries(
     Moradin-Forms_exe
     PRIVATE
     Core_lib
+    spdlog::spdlog
+    tinyxml2::tinyxml2
 )
 
 target_include_directories(
