@@ -19,4 +19,4 @@ target_compile_features(
 )
 
 find_package(fmt REQUIRED)
-target_link_libraries(Core_lib PRIVATE fmt::fmt)
+target_link_libraries(Core_lib PUBLIC fmt::fmt)
