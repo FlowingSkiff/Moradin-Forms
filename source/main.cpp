@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 
+#define SPDLOG_FMT_EXTERNAL
 #include <spdlog/spdlog.h>
 #include <tinyxml2.h>
 
