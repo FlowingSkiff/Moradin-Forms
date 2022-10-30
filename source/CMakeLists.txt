@@ -1,5 +1,5 @@
 add_subdirectory(Core)
-
+add_subdirectory(Utility)
 add_executable(Moradin-Forms_exe main.cpp)
 add_executable(Moradin-Forms::exe ALIAS Moradin-Forms_exe)
 
@@ -7,11 +7,6 @@ set_target_properties(
     Moradin-Forms_exe PROPERTIES
     OUTPUT_NAME Moradin-Forms
     EXPORT_NAME exe
-)
-
-target_compile_definitions(
-    Moradin-Forms_exe PRIVATE
-    AURORA_PATH="${AURORA_PATH}"
 )
 
 target_compile_features(

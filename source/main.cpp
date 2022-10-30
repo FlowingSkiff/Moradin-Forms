@@ -7,10 +7,6 @@
 
 #include "Core/lib.hpp"
 
-#ifndef AURORA_PATH
-// #  error "AURORA_PATH is not defined"
-#endif
-
 auto main() -> int
 {
   library lib;
