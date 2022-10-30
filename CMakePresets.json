@@ -22,13 +22,6 @@
       }
     },
     {
-      "name": "project-definitions",
-      "hidden": true,
-      "cacheVariables": {
-        "AURORA_PATH": ""
-      }
-    },
-    {
       "name": "dev-mode",
       "hidden": true,
       "inherits": "cmake-pedantic",
@@ -65,8 +58,7 @@
         "CMAKE_CXX_EXTENSIONS": "OFF",
         "CMAKE_CXX_STANDARD": "20",
         "CMAKE_CXX_STANDARD_REQUIRED": "ON"
-      },
-      "inherits": "project-definitions"
+      }
     },
     {
       "name": "flags-unix",
@@ -124,8 +116,7 @@
       "inherits": [
         "coverage-unix",
         "dev-mode",
-        "conan",
-        "project-definitions"
+        "conan"
       ],
       "cacheVariables": {
         "COVERAGE_HTML_COMMAND": ""
@@ -137,8 +128,7 @@
       "inherits": [
         "ci-unix",
         "dev-mode",
-        "conan",
-        "project-definitions"
+        "conan"
       ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Sanitize",
