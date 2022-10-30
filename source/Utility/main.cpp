@@ -61,9 +61,6 @@ struct Element
         const auto* txt = ch->Attribute("name");
         const auto* type = ch->Attribute("type");
         if (static_cast<bool>(txt) && static_cast<bool>(type)) {
-          Element ele;
-          ele.name = txt;
-          ele.type = type;
           type_list[std::string(type)].push_back(std::string(txt));
         } else if (static_cast<bool>(type)) {
           logger->warn(
