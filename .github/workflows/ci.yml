@@ -39,6 +39,7 @@ jobs:
     # If you do not wish to use codecov, then simply delete this job from the
     # workflow.
     if: github.repository_owner == 'FlowingSkiff'
+      && false
 
     steps:
     - uses: actions/checkout@v2
