@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include <fmt/core.h>
@@ -30,19 +31,61 @@ static std::shared_ptr<spdlog::logger> logger;
   return all_xml_files;
 }
 
-struct Attribute
+struct attribute
 {
   std::string name;
   std::string value;
 };
 
-struct Element
+struct element
 {
   std::string name;
-  std::string type;
-  std::vector<Element> children;
-  std::vector<Attribute> attributes;
+  std::string text;
+  std::vector<element> children;
+  std::vector<attribute> attributes;
 };
+
+namespace impl
+{
+void build_element_recurse_impl(tinyxml2::XMLElement* node, element& head)
+{
+  if (static_cast<bool>(node)) {
+    element tmp;
+    tmp.name = node->Name();
+    if (static_cast<bool>(node->GetText())) {
+      tmp.text = node->GetText();
+      logger->trace("Has text: {}", tmp.text);
+    }
+    if (tmp.name != "description") {
+      auto* att = node->FirstAttribute();
+      while (static_cast<bool>(att)) {
+        logger->trace("Found attribute: {} {}", att->Name(), att->Value());
+        tmp.attributes.push_back({att->Name(), att->Value()});
+        att = att->Next();
+      }
+      auto* child = node->FirstChildElement();
+      while (static_cast<bool>(child)) {
+        logger->trace("Found child: {}", child->Name());
+        build_element_recurse_impl(child, tmp);
+        child = child->NextSiblingElement();
+      }
+    }
+    head.children.push_back(tmp);
+  }
+}
+}  // namespace impl
+
+auto build_element_recurse(tinyxml2::XMLElement* node)
+{
+  element head;
+  head.name = node->Name();
+  auto* child = node->FirstChildElement();
+  while (static_cast<bool>(child)) {
+    impl::build_element_recurse_impl(child, head);
+    child = child->NextSiblingElement();
+  }
+  return head;
+}
 
 /// @brief Parses a xml file and finds all element types.
 /// @param file file to open and parse
@@ -54,27 +97,29 @@ struct Element
   using tinyxml2::XMLDocument;
   XMLDocument doc;
   if (doc.LoadFile(file.string().c_str()) == tinyxml2::XML_SUCCESS) {
-    auto* ele = doc.FirstChildElement("elements");
-    auto* ch = ele->FirstChildElement("element");
-    if (static_cast<bool>(ch)) {
-      while (static_cast<bool>(ch)) {
-        const auto* txt = ch->Attribute("name");
-        const auto* type = ch->Attribute("type");
-        if (static_cast<bool>(txt) && static_cast<bool>(type)) {
-          type_list[std::string(type)].push_back(std::string(txt));
-        } else if (static_cast<bool>(type)) {
-          logger->warn(
-              "Could not find text for type {} in {}", type, file.string());
-        } else if (static_cast<bool>(txt)) {
-          logger->warn(
-              "Could not find type for name {} in {}", txt, file.string());
-        } else {
-          logger->warn("Could not find type or name in {}", file.string());
-        }
-
-        ch = ch->NextSiblingElement("element");
-      }
-    }
+    auto* head = doc.FirstChildElement();
+    auto all_elements = build_element_recurse(head);
+    // auto* ele = doc.FirstChildElement("elements");
+    // auto* child = ele->FirstChildElement("element");
+    // if (static_cast<bool>(child)) {
+    //   while (static_cast<bool>(child)) {
+    //     const auto* txt = child->Attribute("name");
+    //     const auto* type = child->Attribute("type");
+    //     if (static_cast<bool>(txt) && static_cast<bool>(type)) {
+    //       type_list[std::string(type)].push_back(std::string(txt));
+    //     } else if (static_cast<bool>(type)) {
+    //       logger->warn(
+    //           "Could not find text for type {} in {}", type, file.string());
+    //     } else if (static_cast<bool>(txt)) {
+    //       logger->warn(
+    //           "Could not find type for name {} in {}", txt, file.string());
+    //     } else {
+    //       logger->warn("Could not find type or name in {}", file.string());
+    //     }
+    //
+    //     child = child->NextSiblingElement("element");
+    //   }
+    // }
   }
   return type_list;
 }
